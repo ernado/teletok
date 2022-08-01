@@ -66,7 +66,7 @@ jobs:
       - name: Go build
         env:
           CGO_ENABLED: 0
-        run: go build -v ./cmd/bot
+        run: go build -v ./cmd/teletok
 
       - name: Image build
         uses: docker/build-push-action@v3
@@ -88,20 +88,20 @@ jobs:
       - name: Set up kubectl cache
         uses: actions/cache@v3
         with:
-          path: ~/kubectl
+          path: /usr/bin/kubectl
           key: kubectl-v1.22.4
 
       - name: Check kubectl
         id: "kubectl"
         uses: andstor/file-existence-action@v1
         with:
-          files: ~/kubectl
+          files: /usr/bin/kubectl
 
       - name: Download kubectl
         if: steps.kubectl.outputs.files_exists != 'true'
         run: |
-          wget -O ~/kubectl "https://dl.k8s.io/release/v1.22.4/bin/linux/amd64/kubectl"
-          chmod +x ~/kubectl
+          wget -O /usr/bin/kubectl "https://dl.k8s.io/release/v1.22.4/bin/linux/amd64/kubectl"
+          chmod +x /usr/bin/kubectl
 
       - name: Setup kubeconfig
         env:
@@ -110,5 +110,5 @@ jobs:
 
       - name: Deploy
         run: |
-          ~/kubectl apply -f .k8s/deployment.release.yml
-          ~/kubectl -n ernado rollout status deployment/teletok
+          kubectl apply -f .k8s/deployment.release.yml
+          kubectl -n ernado rollout status deployment/teletok
