@@ -1,5 +1,5 @@
 FROM gcr.io/distroless/static
 
-ADD bot /usr/local/bin/bot
+ADD teletok /usr/local/bin/teletok
 
-ENTRYPOINT ["bot"]
+ENTRYPOINT ["teletok"]
