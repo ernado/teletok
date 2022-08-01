@@ -34,7 +34,8 @@ components:
       enum: ["None"]
     MaybeNumber:
       oneOf:
-        - type: number
+        - type: integer
+          format: int64
         - $ref: '#/components/schemas/None'
     Data:
       type: object
@@ -76,7 +77,7 @@ components:
         video_cover:
           type: string
         video_create_time:
-          type: number
+          type: integer
         video_digg_count:
           $ref: '#/components/schemas/MaybeNumber'
         video_download_count:
@@ -90,7 +91,8 @@ components:
         video_music_author:
           type: string
         video_music_id:
-          type: number
+          type: integer
+          format: int64
         video_music_title:
           type: string
         video_music_url:

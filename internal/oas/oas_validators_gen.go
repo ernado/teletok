@@ -119,24 +119,6 @@ func (s Data) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.VideoCreateTime.Set {
-			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoCreateTime.Value)); err != nil {
-					return errors.Wrap(err, "float")
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "video_create_time",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if s.VideoDiggCount.Set {
 			if err := func() error {
 				if err := s.VideoDiggCount.Value.Validate(); err != nil {
@@ -169,24 +151,6 @@ func (s Data) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "video_download_count",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if s.VideoMusicID.Set {
-			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoMusicID.Value)); err != nil {
-					return errors.Wrap(err, "float")
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "video_music_id",
 			Error: err,
 		})
 	}
@@ -233,11 +197,8 @@ func (s Data) Validate() error {
 }
 func (s MaybeNumber) Validate() error {
 	switch s.Type {
-	case Float64MaybeNumber:
-		if err := (validate.Float{}).Validate(float64(s.Float64)); err != nil {
-			return errors.Wrap(err, "float")
-		}
-		return nil
+	case Int64MaybeNumber:
+		return nil // no validation needed
 	case NoneMaybeNumber:
 		if err := s.None.Validate(); err != nil {
 			return err

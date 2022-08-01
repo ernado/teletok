@@ -21,13 +21,13 @@ type Data struct {
 	VideoAwemeID              OptString      "json:\"video_aweme_id\""
 	VideoCommentCount         OptMaybeNumber "json:\"video_comment_count\""
 	VideoCover                OptString      "json:\"video_cover\""
-	VideoCreateTime           OptFloat64     "json:\"video_create_time\""
+	VideoCreateTime           OptInt         "json:\"video_create_time\""
 	VideoDiggCount            OptMaybeNumber "json:\"video_digg_count\""
 	VideoDownloadCount        OptMaybeNumber "json:\"video_download_count\""
 	VideoDynamicCover         OptString      "json:\"video_dynamic_cover\""
 	VideoHashtags             []string       "json:\"video_hashtags\""
 	VideoMusicAuthor          OptString      "json:\"video_music_author\""
-	VideoMusicID              OptFloat64     "json:\"video_music_id\""
+	VideoMusicID              OptInt64       "json:\"video_music_id\""
 	VideoMusicTitle           OptString      "json:\"video_music_title\""
 	VideoMusicURL             OptString      "json:\"video_music_url\""
 	VideoOriginCover          OptString      "json:\"video_origin_cover\""
@@ -40,9 +40,9 @@ type Data struct {
 // Ref: #/components/schemas/MaybeNumber
 // MaybeNumber represents sum type.
 type MaybeNumber struct {
-	Type    MaybeNumberType // switch on this field
-	Float64 float64
-	None    None
+	Type  MaybeNumberType // switch on this field
+	Int64 int64
+	None  None
 }
 
 // MaybeNumberType is oneOf type of MaybeNumber.
@@ -50,34 +50,34 @@ type MaybeNumberType string
 
 // Possible values for MaybeNumberType.
 const (
-	Float64MaybeNumber MaybeNumberType = "float64"
-	NoneMaybeNumber    MaybeNumberType = "None"
+	Int64MaybeNumber MaybeNumberType = "int64"
+	NoneMaybeNumber  MaybeNumberType = "None"
 )
 
-// IsFloat64 reports whether MaybeNumber is float64.
-func (s MaybeNumber) IsFloat64() bool { return s.Type == Float64MaybeNumber }
+// IsInt64 reports whether MaybeNumber is int64.
+func (s MaybeNumber) IsInt64() bool { return s.Type == Int64MaybeNumber }
 
 // IsNone reports whether MaybeNumber is None.
 func (s MaybeNumber) IsNone() bool { return s.Type == NoneMaybeNumber }
 
-// SetFloat64 sets MaybeNumber to float64.
-func (s *MaybeNumber) SetFloat64(v float64) {
-	s.Type = Float64MaybeNumber
-	s.Float64 = v
+// SetInt64 sets MaybeNumber to int64.
+func (s *MaybeNumber) SetInt64(v int64) {
+	s.Type = Int64MaybeNumber
+	s.Int64 = v
 }
 
-// GetFloat64 returns float64 and true boolean if MaybeNumber is float64.
-func (s MaybeNumber) GetFloat64() (v float64, ok bool) {
-	if !s.IsFloat64() {
+// GetInt64 returns int64 and true boolean if MaybeNumber is int64.
+func (s MaybeNumber) GetInt64() (v int64, ok bool) {
+	if !s.IsInt64() {
 		return v, false
 	}
-	return s.Float64, true
+	return s.Int64, true
 }
 
-// NewFloat64MaybeNumber returns new MaybeNumber from float64.
-func NewFloat64MaybeNumber(v float64) MaybeNumber {
+// NewInt64MaybeNumber returns new MaybeNumber from int64.
+func NewInt64MaybeNumber(v int64) MaybeNumber {
 	var s MaybeNumber
-	s.SetFloat64(v)
+	s.SetInt64(v)
 	return s
 }
 
@@ -109,38 +109,38 @@ const (
 	NoneNone None = "None"
 )
 
-// NewOptFloat64 returns new OptFloat64 with value set to v.
-func NewOptFloat64(v float64) OptFloat64 {
-	return OptFloat64{
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptFloat64 is optional float64.
-type OptFloat64 struct {
-	Value float64
+// OptInt is optional int.
+type OptInt struct {
+	Value int
 	Set   bool
 }
 
-// IsSet returns true if OptFloat64 was set.
-func (o OptFloat64) IsSet() bool { return o.Set }
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptFloat64) Reset() {
-	var v float64
+func (o *OptInt) Reset() {
+	var v int
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptFloat64) SetTo(v float64) {
+func (o *OptInt) SetTo(v int) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptFloat64) Get() (v float64, ok bool) {
+func (o OptInt) Get() (v int, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -148,7 +148,53 @@ func (o OptFloat64) Get() (v float64, ok bool) {
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptFloat64) Or(d float64) float64 {
+func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt64 returns new OptInt64 with value set to v.
+func NewOptInt64(v int64) OptInt64 {
+	return OptInt64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt64 is optional int64.
+type OptInt64 struct {
+	Value int64
+	Set   bool
+}
+
+// IsSet returns true if OptInt64 was set.
+func (o OptInt64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt64) Reset() {
+	var v int64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt64) SetTo(v int64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt64) Get() (v int64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt64) Or(d int64) int64 {
 	if v, ok := o.Get(); ok {
 		return v
 	}

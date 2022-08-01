@@ -638,8 +638,8 @@ func (s *Data) UnmarshalJSON(data []byte) error {
 // Encode encodes MaybeNumber as json.
 func (s MaybeNumber) Encode(e *jx.Encoder) {
 	switch s.Type {
-	case Float64MaybeNumber:
-		e.Float64(s.Float64)
+	case Int64MaybeNumber:
+		e.Int64(s.Int64)
 	case NoneMaybeNumber:
 		s.None.Encode(e)
 	}
@@ -653,12 +653,12 @@ func (s *MaybeNumber) Decode(d *jx.Decoder) error {
 	// Sum type type_discriminator.
 	switch t := d.Next(); t {
 	case jx.Number:
-		v, err := d.Float64()
-		s.Float64 = float64(v)
+		v, err := d.Int64()
+		s.Int64 = int64(v)
 		if err != nil {
 			return err
 		}
-		s.Type = Float64MaybeNumber
+		s.Type = Int64MaybeNumber
 	case jx.String:
 		if err := s.None.Decode(d); err != nil {
 			return err
@@ -721,37 +721,72 @@ func (s *None) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes float64 as json.
-func (o OptFloat64) Encode(e *jx.Encoder) {
+// Encode encodes int as json.
+func (o OptInt) Encode(e *jx.Encoder) {
 	if !o.Set {
 		return
 	}
-	e.Float64(float64(o.Value))
+	e.Int(int(o.Value))
 }
 
-// Decode decodes float64 from json.
-func (o *OptFloat64) Decode(d *jx.Decoder) error {
+// Decode decodes int from json.
+func (o *OptInt) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptFloat64 to nil")
+		return errors.New("invalid: unable to decode OptInt to nil")
 	}
 	o.Set = true
-	v, err := d.Float64()
+	v, err := d.Int()
 	if err != nil {
 		return err
 	}
-	o.Value = float64(v)
+	o.Value = int(v)
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s OptFloat64) MarshalJSON() ([]byte, error) {
+func (s OptInt) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptFloat64) UnmarshalJSON(data []byte) error {
+func (s *OptInt) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes int64 as json.
+func (o OptInt64) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Int64(int64(o.Value))
+}
+
+// Decode decodes int64 from json.
+func (o *OptInt64) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptInt64 to nil")
+	}
+	o.Set = true
+	v, err := d.Int64()
+	if err != nil {
+		return err
+	}
+	o.Value = int64(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptInt64) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptInt64) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
