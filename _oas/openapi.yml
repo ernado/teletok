@@ -1,0 +1,100 @@
+openapi: 3.0.3
+servers:
+  - url: https://api.douyin.wtf
+externalDocs:
+    description: "API Reference"
+    url: "https://github.com/Evil0ctal/Douyin_TikTok_Download_API"
+info:
+  title: TikTok Parsing API
+  description: TikTok Parsing API using https://github.com/Evil0ctal/Douyin_TikTok_Download_API
+  version: 1.0.0
+paths:
+  /api:
+    get:
+      operationId: getData
+      parameters:
+        - name: url
+          in: query
+          description: url
+          required: true
+          schema:
+              type: string
+      responses:
+        200:
+          description: Data about the url
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+
+components:
+  schemas:
+    Data:
+      type: object
+      required:
+        - status
+      properties:
+        analyze_time:
+          type: string
+        api_url:
+          type: string
+        nwm_video_url:
+          type: string
+        original_url:
+          type: string
+        platform:
+          type: string
+        status:
+          type: string
+        url_type:
+          type: string
+        video_author_diggCount:
+          type: number
+        video_author_followerCount:
+          type: number
+        video_author_followingCount:
+          type: number
+        video_author_heartCount:
+          type: number
+        video_author_id:
+          type: string
+        video_author_nickname:
+          type: string
+        video_author_videoCount:
+          type: number
+        video_aweme_id:
+          type: string
+        video_comment_count:
+          type: number
+        video_cover:
+          type: string
+        video_create_time:
+          type: number
+        video_digg_count:
+          type: number
+        video_download_count:
+          type: number
+        video_dynamic_cover:
+          type: string
+        video_hashtags:
+          type: array
+          items:
+            type: object
+        video_music_author:
+          type: string
+        video_music_id:
+          type: number
+        video_music_title:
+          type: string
+        video_music_url:
+          type: string
+        video_origin_cover:
+          type: string
+        video_play_count:
+          type: number
+        video_share_count:
+          type: number
+        video_title:
+          type: string
+        wm_video_url:
+          type: string
