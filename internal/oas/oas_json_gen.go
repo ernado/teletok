@@ -151,7 +151,7 @@ func (s Data) encodeFields(e *jx.Encoder) {
 			e.FieldStart("video_hashtags")
 			e.ArrStart()
 			for _, elem := range s.VideoHashtags {
-				elem.Encode(e)
+				e.Str(elem)
 			}
 			e.ArrEnd()
 		}
@@ -469,10 +469,12 @@ func (s *Data) Decode(d *jx.Decoder) error {
 			}
 		case "video_hashtags":
 			if err := func() error {
-				s.VideoHashtags = make([]DataVideoHashtagsItem, 0)
+				s.VideoHashtags = make([]string, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem DataVideoHashtagsItem
-					if err := elem.Decode(d); err != nil {
+					var elem string
+					v, err := d.Str()
+					elem = string(v)
+					if err != nil {
 						return err
 					}
 					s.VideoHashtags = append(s.VideoHashtags, elem)
@@ -633,47 +635,88 @@ func (s *Data) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode implements json.Marshaler.
-func (s DataVideoHashtagsItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
+// Encode encodes MaybeNumber as json.
+func (s MaybeNumber) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case Float64MaybeNumber:
+		e.Float64(s.Float64)
+	case NoneMaybeNumber:
+		s.None.Encode(e)
+	}
 }
 
-// encodeFields encodes fields.
-func (s DataVideoHashtagsItem) encodeFields(e *jx.Encoder) {
-}
-
-var jsonFieldsNameOfDataVideoHashtagsItem = [0]string{}
-
-// Decode decodes DataVideoHashtagsItem from json.
-func (s *DataVideoHashtagsItem) Decode(d *jx.Decoder) error {
+// Decode decodes MaybeNumber from json.
+func (s *MaybeNumber) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode DataVideoHashtagsItem to nil")
+		return errors.New("invalid: unable to decode MaybeNumber to nil")
 	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		default:
-			return d.Skip()
+	// Sum type type_discriminator.
+	switch t := d.Next(); t {
+	case jx.Number:
+		v, err := d.Float64()
+		s.Float64 = float64(v)
+		if err != nil {
+			return err
 		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode DataVideoHashtagsItem")
+		s.Type = Float64MaybeNumber
+	case jx.String:
+		if err := s.None.Decode(d); err != nil {
+			return err
+		}
+		s.Type = NoneMaybeNumber
+	default:
+		return errors.Errorf("unexpected json type %q", t)
 	}
-
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s DataVideoHashtagsItem) MarshalJSON() ([]byte, error) {
+func (s MaybeNumber) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *DataVideoHashtagsItem) UnmarshalJSON(data []byte) error {
+func (s *MaybeNumber) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes None as json.
+func (s None) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes None from json.
+func (s *None) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode None to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch None(v) {
+	case NoneNone:
+		*s = NoneNone
+	default:
+		*s = None(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s None) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *None) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -709,6 +752,39 @@ func (s OptFloat64) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptFloat64) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes MaybeNumber as json.
+func (o OptMaybeNumber) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes MaybeNumber from json.
+func (o *OptMaybeNumber) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptMaybeNumber to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptMaybeNumber) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptMaybeNumber) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

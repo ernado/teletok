@@ -29,6 +29,13 @@ paths:
 
 components:
   schemas:
+    None:
+      type: string
+      enum: ["None"]
+    MaybeNumber:
+      oneOf:
+        - type: number
+        - $ref: '#/components/schemas/None'
     Data:
       type: object
       required:
@@ -49,37 +56,37 @@ components:
         url_type:
           type: string
         video_author_diggCount:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_author_followerCount:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_author_followingCount:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_author_heartCount:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_author_id:
           type: string
         video_author_nickname:
           type: string
         video_author_videoCount:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_aweme_id:
           type: string
         video_comment_count:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_cover:
           type: string
         video_create_time:
           type: number
         video_digg_count:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_download_count:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_dynamic_cover:
           type: string
         video_hashtags:
           type: array
           items:
-            type: object
+            type: string
         video_music_author:
           type: string
         video_music_id:
@@ -91,9 +98,9 @@ components:
         video_origin_cover:
           type: string
         video_play_count:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_share_count:
-          type: number
+          $ref: '#/components/schemas/MaybeNumber'
         video_title:
           type: string
         wm_video_url:

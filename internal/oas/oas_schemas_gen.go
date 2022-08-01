@@ -4,40 +4,110 @@ package oas
 
 // Ref: #/components/schemas/Data
 type Data struct {
-	AnalyzeTime               OptString               "json:\"analyze_time\""
-	APIURL                    OptString               "json:\"api_url\""
-	NwmVideoURL               OptString               "json:\"nwm_video_url\""
-	OriginalURL               OptString               "json:\"original_url\""
-	Platform                  OptString               "json:\"platform\""
-	Status                    string                  "json:\"status\""
-	URLType                   OptString               "json:\"url_type\""
-	VideoAuthorDiggCount      OptFloat64              "json:\"video_author_diggCount\""
-	VideoAuthorFollowerCount  OptFloat64              "json:\"video_author_followerCount\""
-	VideoAuthorFollowingCount OptFloat64              "json:\"video_author_followingCount\""
-	VideoAuthorHeartCount     OptFloat64              "json:\"video_author_heartCount\""
-	VideoAuthorID             OptString               "json:\"video_author_id\""
-	VideoAuthorNickname       OptString               "json:\"video_author_nickname\""
-	VideoAuthorVideoCount     OptFloat64              "json:\"video_author_videoCount\""
-	VideoAwemeID              OptString               "json:\"video_aweme_id\""
-	VideoCommentCount         OptFloat64              "json:\"video_comment_count\""
-	VideoCover                OptString               "json:\"video_cover\""
-	VideoCreateTime           OptFloat64              "json:\"video_create_time\""
-	VideoDiggCount            OptFloat64              "json:\"video_digg_count\""
-	VideoDownloadCount        OptFloat64              "json:\"video_download_count\""
-	VideoDynamicCover         OptString               "json:\"video_dynamic_cover\""
-	VideoHashtags             []DataVideoHashtagsItem "json:\"video_hashtags\""
-	VideoMusicAuthor          OptString               "json:\"video_music_author\""
-	VideoMusicID              OptFloat64              "json:\"video_music_id\""
-	VideoMusicTitle           OptString               "json:\"video_music_title\""
-	VideoMusicURL             OptString               "json:\"video_music_url\""
-	VideoOriginCover          OptString               "json:\"video_origin_cover\""
-	VideoPlayCount            OptFloat64              "json:\"video_play_count\""
-	VideoShareCount           OptFloat64              "json:\"video_share_count\""
-	VideoTitle                OptString               "json:\"video_title\""
-	WmVideoURL                OptString               "json:\"wm_video_url\""
+	AnalyzeTime               OptString      "json:\"analyze_time\""
+	APIURL                    OptString      "json:\"api_url\""
+	NwmVideoURL               OptString      "json:\"nwm_video_url\""
+	OriginalURL               OptString      "json:\"original_url\""
+	Platform                  OptString      "json:\"platform\""
+	Status                    string         "json:\"status\""
+	URLType                   OptString      "json:\"url_type\""
+	VideoAuthorDiggCount      OptMaybeNumber "json:\"video_author_diggCount\""
+	VideoAuthorFollowerCount  OptMaybeNumber "json:\"video_author_followerCount\""
+	VideoAuthorFollowingCount OptMaybeNumber "json:\"video_author_followingCount\""
+	VideoAuthorHeartCount     OptMaybeNumber "json:\"video_author_heartCount\""
+	VideoAuthorID             OptString      "json:\"video_author_id\""
+	VideoAuthorNickname       OptString      "json:\"video_author_nickname\""
+	VideoAuthorVideoCount     OptMaybeNumber "json:\"video_author_videoCount\""
+	VideoAwemeID              OptString      "json:\"video_aweme_id\""
+	VideoCommentCount         OptMaybeNumber "json:\"video_comment_count\""
+	VideoCover                OptString      "json:\"video_cover\""
+	VideoCreateTime           OptFloat64     "json:\"video_create_time\""
+	VideoDiggCount            OptMaybeNumber "json:\"video_digg_count\""
+	VideoDownloadCount        OptMaybeNumber "json:\"video_download_count\""
+	VideoDynamicCover         OptString      "json:\"video_dynamic_cover\""
+	VideoHashtags             []string       "json:\"video_hashtags\""
+	VideoMusicAuthor          OptString      "json:\"video_music_author\""
+	VideoMusicID              OptFloat64     "json:\"video_music_id\""
+	VideoMusicTitle           OptString      "json:\"video_music_title\""
+	VideoMusicURL             OptString      "json:\"video_music_url\""
+	VideoOriginCover          OptString      "json:\"video_origin_cover\""
+	VideoPlayCount            OptMaybeNumber "json:\"video_play_count\""
+	VideoShareCount           OptMaybeNumber "json:\"video_share_count\""
+	VideoTitle                OptString      "json:\"video_title\""
+	WmVideoURL                OptString      "json:\"wm_video_url\""
 }
 
-type DataVideoHashtagsItem struct{}
+// Ref: #/components/schemas/MaybeNumber
+// MaybeNumber represents sum type.
+type MaybeNumber struct {
+	Type    MaybeNumberType // switch on this field
+	Float64 float64
+	None    None
+}
+
+// MaybeNumberType is oneOf type of MaybeNumber.
+type MaybeNumberType string
+
+// Possible values for MaybeNumberType.
+const (
+	Float64MaybeNumber MaybeNumberType = "float64"
+	NoneMaybeNumber    MaybeNumberType = "None"
+)
+
+// IsFloat64 reports whether MaybeNumber is float64.
+func (s MaybeNumber) IsFloat64() bool { return s.Type == Float64MaybeNumber }
+
+// IsNone reports whether MaybeNumber is None.
+func (s MaybeNumber) IsNone() bool { return s.Type == NoneMaybeNumber }
+
+// SetFloat64 sets MaybeNumber to float64.
+func (s *MaybeNumber) SetFloat64(v float64) {
+	s.Type = Float64MaybeNumber
+	s.Float64 = v
+}
+
+// GetFloat64 returns float64 and true boolean if MaybeNumber is float64.
+func (s MaybeNumber) GetFloat64() (v float64, ok bool) {
+	if !s.IsFloat64() {
+		return v, false
+	}
+	return s.Float64, true
+}
+
+// NewFloat64MaybeNumber returns new MaybeNumber from float64.
+func NewFloat64MaybeNumber(v float64) MaybeNumber {
+	var s MaybeNumber
+	s.SetFloat64(v)
+	return s
+}
+
+// SetNone sets MaybeNumber to None.
+func (s *MaybeNumber) SetNone(v None) {
+	s.Type = NoneMaybeNumber
+	s.None = v
+}
+
+// GetNone returns None and true boolean if MaybeNumber is None.
+func (s MaybeNumber) GetNone() (v None, ok bool) {
+	if !s.IsNone() {
+		return v, false
+	}
+	return s.None, true
+}
+
+// NewNoneMaybeNumber returns new MaybeNumber from None.
+func NewNoneMaybeNumber(v None) MaybeNumber {
+	var s MaybeNumber
+	s.SetNone(v)
+	return s
+}
+
+// Ref: #/components/schemas/None
+type None string
+
+const (
+	NoneNone None = "None"
+)
 
 // NewOptFloat64 returns new OptFloat64 with value set to v.
 func NewOptFloat64(v float64) OptFloat64 {
@@ -79,6 +149,52 @@ func (o OptFloat64) Get() (v float64, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptMaybeNumber returns new OptMaybeNumber with value set to v.
+func NewOptMaybeNumber(v MaybeNumber) OptMaybeNumber {
+	return OptMaybeNumber{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptMaybeNumber is optional MaybeNumber.
+type OptMaybeNumber struct {
+	Value MaybeNumber
+	Set   bool
+}
+
+// IsSet returns true if OptMaybeNumber was set.
+func (o OptMaybeNumber) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptMaybeNumber) Reset() {
+	var v MaybeNumber
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptMaybeNumber) SetTo(v MaybeNumber) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptMaybeNumber) Get() (v MaybeNumber, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptMaybeNumber) Or(d MaybeNumber) MaybeNumber {
 	if v, ok := o.Get(); ok {
 		return v
 	}

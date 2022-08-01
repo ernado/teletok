@@ -13,8 +13,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoAuthorDiggCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoAuthorDiggCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoAuthorDiggCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -31,8 +31,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoAuthorFollowerCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoAuthorFollowerCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoAuthorFollowerCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -49,8 +49,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoAuthorFollowingCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoAuthorFollowingCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoAuthorFollowingCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -67,8 +67,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoAuthorHeartCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoAuthorHeartCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoAuthorHeartCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -85,8 +85,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoAuthorVideoCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoAuthorVideoCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoAuthorVideoCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -103,8 +103,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoCommentCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoCommentCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoCommentCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -139,8 +139,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoDiggCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoDiggCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoDiggCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -157,8 +157,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoDownloadCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoDownloadCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoDownloadCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -193,8 +193,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoPlayCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoPlayCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoPlayCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -211,8 +211,8 @@ func (s Data) Validate() error {
 	if err := func() error {
 		if s.VideoShareCount.Set {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.VideoShareCount.Value)); err != nil {
-					return errors.Wrap(err, "float")
+				if err := s.VideoShareCount.Value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -230,4 +230,29 @@ func (s Data) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+func (s MaybeNumber) Validate() error {
+	switch s.Type {
+	case Float64MaybeNumber:
+		if err := (validate.Float{}).Validate(float64(s.Float64)); err != nil {
+			return errors.Wrap(err, "float")
+		}
+		return nil
+	case NoneMaybeNumber:
+		if err := s.None.Validate(); err != nil {
+			return err
+		}
+		return nil
+	default:
+		return errors.Errorf("invalid type %q", s.Type)
+	}
+}
+
+func (s None) Validate() error {
+	switch s {
+	case "None":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }
