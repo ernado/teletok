@@ -45,6 +45,11 @@ spec:
                 secretKeyRef:
                   name: teletok
                   key: BOT_TOKEN
+            - name: API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: teletok
+                  key: API_URL
             - name: APP_ID
               valueFrom:
                 secretKeyRef:
