@@ -158,6 +158,7 @@ func main() {
 						var caption []message.StyledTextOption
 						caption = append(caption,
 							styling.Bold(data.VideoAuthorNickname.Value),
+							styling.Plain(" "),
 							styling.TextURL(videoName, data.OriginalURL.Value),
 						)
 						if _, err := reply.Media(gCtx,
