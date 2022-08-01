@@ -39,10 +39,9 @@ func main() {
 
 		dispatcher := tg.NewUpdateDispatcher()
 		opt := telegram.Options{
-			UpdateHandler:  dispatcher,
-			Logger:         logger.Named("gotd"),
-			TracerProvider: metrics.TracerProvider(),
-			Middlewares:    []telegram.Middleware{mw},
+			UpdateHandler: dispatcher,
+			Logger:        logger.Named("gotd"),
+			Middlewares:   []telegram.Middleware{mw},
 		}
 
 		tiktok, err := oas.NewClient(os.Getenv("API_URL"),
