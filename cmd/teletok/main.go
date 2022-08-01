@@ -89,7 +89,7 @@ func main() {
 				return nil
 			}
 
-			if err := action.UploadVideo(ctx, 0); err != nil {
+			if err := action.RecordVideo(ctx); err != nil {
 				return err
 			}
 
@@ -110,7 +110,7 @@ func main() {
 					return fmt.Errorf("status: %s", data.Status)
 				}
 
-				stage.Store("downloading")
+				stage.Store("uploading")
 
 				upload, err := uploader.NewUploader(api).WithThreads(2).FromURL(ctx, data.NwmVideoURL.Value)
 				if err != nil {
