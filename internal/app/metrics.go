@@ -38,6 +38,7 @@ type Metrics struct {
 	resource       *resource.Resource
 	mux            *http.ServeMux
 	srv            *http.Server
+	lg             *zap.Logger
 }
 
 // Config for metrics.
@@ -120,6 +121,7 @@ func (m *Metrics) Run(ctx context.Context) error {
 	wg, ctx := errgroup.WithContext(ctx)
 
 	wg.Go(func() error {
+		m.lg.Info("Listening")
 		if err := m.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			return err
 		}
@@ -128,6 +130,7 @@ func (m *Metrics) Run(ctx context.Context) error {
 	wg.Go(func() error {
 		// Wait until g ctx canceled, then try to shut down server.
 		<-ctx.Done()
+		m.lg.Info("Shutting down")
 
 		ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 		defer cancel()
@@ -138,7 +141,7 @@ func (m *Metrics) Run(ctx context.Context) error {
 }
 
 // NewMetrics returns new Metrics.
-func NewMetrics(log *zap.Logger, cfg Config) (*Metrics, error) {
+func NewMetrics(lg *zap.Logger, cfg Config) (*Metrics, error) {
 	if cfg.Addr == "" {
 		cfg.Addr = os.Getenv("METRICS_ADDR")
 	}
@@ -196,6 +199,7 @@ func NewMetrics(log *zap.Logger, cfg Config) (*Metrics, error) {
 	)
 	mux := http.NewServeMux()
 	m := &Metrics{
+		lg:             lg.Named("metrics"),
 		resource:       res,
 		prometheus:     promExporter,
 		jaeger:         jaegerExporter,
@@ -221,7 +225,7 @@ func NewMetrics(log *zap.Logger, cfg Config) (*Metrics, error) {
 	m.registerProfiler()
 	m.registerPrometheus()
 
-	log.Info("Metrics initialized",
+	lg.Info("Metrics initialized",
 		zap.Stringer("otel.resource", res),
 		zap.String("http.addr", cfg.Addr),
 	)
