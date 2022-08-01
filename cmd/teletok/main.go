@@ -11,6 +11,7 @@ import (
 	"github.com/gotd/contrib/oteltg"
 	"github.com/gotd/td/telegram"
 	"github.com/gotd/td/telegram/message"
+	"github.com/gotd/td/telegram/message/styling"
 	"github.com/gotd/td/telegram/uploader"
 	"github.com/gotd/td/tg"
 	"go.opentelemetry.io/otel/attribute"
@@ -148,8 +149,16 @@ func main() {
 							return fmt.Errorf("upload: %w", err)
 						}
 						lg.Info("Uploaded")
+
+						var caption []message.StyledTextOption
+						caption = append(caption,
+							styling.Bold(data.VideoAuthorNickname.Value),
+							styling.Italic(fmt.Sprintf("(%s): ", data.VideoAwemeID.Value)),
+							styling.TextURL(data.VideoTitle.Or("video"), data.OriginalURL.Value),
+						)
+
 						if _, err := reply.Media(gCtx,
-							message.UploadedDocument(upload).
+							message.UploadedDocument(upload, caption...).
 								Filename(fmt.Sprintf("%s.mp4", data.VideoAwemeID.Or("video"))).
 								Video().
 								SupportsStreaming(),
@@ -177,8 +186,6 @@ func main() {
 							return err
 						}
 
-						var sentMessage *tg.UpdateShortSentMessage
-
 						tick := func() error {
 							if err := reportProgress(); err != nil {
 								return fmt.Errorf("report: %w", err)
@@ -195,13 +202,6 @@ func main() {
 							select {
 							case <-done:
 								_ = action.Cancel(gCtx)
-								if sentMessage != nil {
-									lg.Info("Removing message")
-									if _, err = answer.Revoke().Messages(gCtx, sentMessage.ID); err != nil {
-										return fmt.Errorf("remove: %w", err)
-									}
-									lg.Info("Removed")
-								}
 
 								return nil
 							case <-ticker.C:
