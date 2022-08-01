@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ernado
+  name: teletok
+  labels:
+    app: teletok
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teletok
+  template:
+    metadata:
+      labels:
+        app: teletok
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8090'
+    spec:
+      volumes:
+        - name: cache
+          emptyDir: {}
+      containers:
+        - name: bot
+          image: ghcr.io/ernado/teletok:main
+          resources:
+            requests:
+              cpu: 500m
+              memory: 256M
+            limits:
+              cpu: "2"
+              memory: 512M
+          env:
+            - name: OTEL_EXPORTER_JAEGER_AGENT_HOST
+              value: jaeger.faster-monitoring.svc.cluster.local
+            - name: HOME
+              value: /cache
+            - name: METRICS_ADDR
+              value: 0.0.0.0:8090
+            - name: BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: teletok
+                  key: BOT_TOKEN
+            - name: APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: teletok
+                  key: APP_ID
+            - name: APP_HASH
+              valueFrom:
+                secretKeyRef:
+                  name: teletok
+                  key: APP_HASH
+          volumeMounts:
+            - mountPath: /cache
+              name: cache
