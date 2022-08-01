@@ -150,11 +150,16 @@ func main() {
 						}
 						lg.Info("Uploaded")
 
+						videoName := data.VideoTitle.Value
+						if videoName == "" {
+							videoName = "video"
+						}
+
 						var caption []message.StyledTextOption
 						caption = append(caption,
 							styling.Bold(data.VideoAuthorNickname.Value),
-							styling.Italic(fmt.Sprintf("(%s): ", data.VideoAwemeID.Value)),
-							styling.TextURL(data.VideoTitle.Or("video"), data.OriginalURL.Value),
+							styling.Italic(fmt.Sprintf("(%s): ", data.VideoAuthorID.Value)),
+							styling.TextURL(videoName, data.OriginalURL.Value),
 						)
 
 						if _, err := reply.Media(gCtx,
