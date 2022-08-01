@@ -158,10 +158,8 @@ func main() {
 						var caption []message.StyledTextOption
 						caption = append(caption,
 							styling.Bold(data.VideoAuthorNickname.Value),
-							styling.Italic(fmt.Sprintf("(%s): ", data.VideoAuthorID.Value)),
 							styling.TextURL(videoName, data.OriginalURL.Value),
 						)
-
 						if _, err := reply.Media(gCtx,
 							message.UploadedDocument(upload, caption...).
 								Filename(fmt.Sprintf("%s.mp4", data.VideoAwemeID.Or("video"))).
