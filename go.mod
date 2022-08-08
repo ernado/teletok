@@ -4,10 +4,10 @@ go 1.18
 
 require (
 	github.com/go-faster/errors v0.6.1
-	github.com/go-faster/jx v0.38.1
+	github.com/go-faster/jx v0.39.0
 	github.com/gotd/contrib v0.13.0
 	github.com/gotd/td v0.64.0
-	github.com/ogen-go/ogen v0.46.0
+	github.com/ogen-go/ogen v0.46.2
 	github.com/povilasv/prommod v0.0.12
 	github.com/prometheus/client_golang v1.12.2
 	github.com/stretchr/testify v1.8.0
@@ -30,7 +30,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/go-faster/xor v0.3.0 // indirect
-	github.com/go-faster/yamlx v0.2.1 // indirect
+	github.com/go-faster/yamlx v0.3.2 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
