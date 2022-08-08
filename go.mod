@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/go-faster/errors v0.6.1
-	github.com/go-faster/jx v0.38.1
+	github.com/go-faster/jx v0.39.0
 	github.com/gotd/contrib v0.13.0
 	github.com/gotd/td v0.64.0
 	github.com/ogen-go/ogen v0.46.0
