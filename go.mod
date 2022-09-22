@@ -7,7 +7,7 @@ require (
 	github.com/go-faster/jx v0.39.0
 	github.com/gotd/contrib v0.13.0
 	github.com/gotd/td v0.69.0
-	github.com/ogen-go/ogen v0.48.2
+	github.com/ogen-go/ogen v0.49.0
 	github.com/povilasv/prommod v0.0.12
 	github.com/prometheus/client_golang v1.13.0
 	github.com/stretchr/testify v1.8.0
@@ -30,7 +30,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/go-faster/xor v0.3.0 // indirect
-	github.com/go-faster/yamlx v0.3.5 // indirect
+	github.com/go-faster/yamlx v0.3.6 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -48,6 +48,7 @@ require (
 	github.com/segmentio/asm v1.2.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
+	golang.org/x/exp v0.0.0-20220907003533-145caa8ea1d0 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/net v0.0.0-20220822230855-b0a4917ee28c // indirect
 	golang.org/x/sys v0.0.0-20220825204002-c680a09ffe64 // indirect
