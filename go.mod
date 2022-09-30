@@ -7,7 +7,7 @@ require (
 	github.com/go-faster/jx v0.39.0
 	github.com/gotd/contrib v0.13.0
 	github.com/gotd/td v0.69.1
-	github.com/ogen-go/ogen v0.49.0
+	github.com/ogen-go/ogen v0.50.0
 	github.com/povilasv/prommod v0.0.12
 	github.com/prometheus/client_golang v1.13.0
 	github.com/stretchr/testify v1.8.0
@@ -29,6 +29,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
+	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-faster/xor v0.3.0 // indirect
 	github.com/go-faster/yamlx v0.3.6 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
@@ -55,6 +56,7 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
 	rsc.io/qr v0.2.0 // indirect
