@@ -7,7 +7,7 @@ require (
 	github.com/go-faster/jx v0.39.0
 	github.com/gotd/contrib v0.13.0
 	github.com/gotd/td v0.69.1
-	github.com/ogen-go/ogen v0.50.0
+	github.com/ogen-go/ogen v0.51.0
 	github.com/povilasv/prommod v0.0.12
 	github.com/prometheus/client_golang v1.13.0
 	github.com/stretchr/testify v1.8.0
