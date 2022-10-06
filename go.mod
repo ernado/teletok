@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/go-faster/errors v0.6.1
-	github.com/go-faster/jx v0.39.0
+	github.com/go-faster/jx v0.40.0
 	github.com/gotd/contrib v0.13.0
 	github.com/gotd/td v0.69.1
 	github.com/ogen-go/ogen v0.51.0
@@ -49,7 +49,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v0.32.1 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/exp v0.0.0-20220907003533-145caa8ea1d0 // indirect
+	golang.org/x/exp v0.0.0-20221002003631-540bb7301a08 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/net v0.0.0-20220822230855-b0a4917ee28c // indirect
 	golang.org/x/sys v0.0.0-20220825204002-c680a09ffe64 // indirect
